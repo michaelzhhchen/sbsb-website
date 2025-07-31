@@ -1,7 +1,16 @@
 ---
 import Layout from "../layouts/Layout.astro";
+
+import homeImage from "../assets/home.jpg";
 ---
 
-<Layout>
-  <h1>SBSB</h1>
+<Layout img={homeImage} alt="SBSB performing on stage">
+  <div class="flex flex-col gap-5 pt-20">
+    <h1 class="text-center text-5xl font-bold">
+      Something Borrowed<br /> Something Blue
+    </h1>
+    <p class="text-center text-xl">
+      Duke University's Premiere Christian Co-ed A Capella Group
+    </p>
+  </div>
 </Layout>

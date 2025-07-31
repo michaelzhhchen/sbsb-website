@@ -1,5 +1,11 @@
 ---
 import "../styles/global.css";
+
+import { Image } from "astro:assets";
+import NavLink from "../components/navLink.astro";
+import SocialLink from "../components/socialLink.astro";
+
+const { img, alt } = Astro.props;
 ---
 
 <html lang="en">
@@ -10,7 +16,38 @@ import "../styles/global.css";
     <meta name="generator" content={Astro.generator} />
     <title>Astro</title>
   </head>
-  <body>
+  <body class="flex min-h-screen flex-col text-white">
+    <Image src={img} alt={alt} class="fixed -z-10 h-screen w-screen" />
+    <nav class="flex w-screen items-center justify-center gap-15 py-5 text-xl">
+      <NavLink href="/">Home</NavLink>
+      <NavLink href="/about">About</NavLink>
+      <NavLink href="/members">Members</NavLink>
+      <NavLink href="/live">Live</NavLink>
+      <NavLink href="/albums">Albums</NavLink>
+      <NavLink href="/donate">Donate</NavLink>
+      <NavLink href="/audition">Audition</NavLink>
+      <NavLink href="/contact">Contact</NavLink>
+    </nav>
     <slot />
+    <footer
+      class="mt-auto grid grid-cols-3 items-center justify-items-center px-32 py-10"
+    >
+      <p>© Something Borrowed Something Blue</p>
+      <div class="flex items-center justify-start gap-2">
+        <SocialLink
+          platform="youtube"
+          link="https://www.youtube.com/user/borrowednblue"
+        />
+        <SocialLink
+          platform="spotify"
+          link="https://open.spotify.com/artist/7hEZd0gUXJxxXGgMsIPmvG?si=zq80GAn4RfWHTEEztV8-wg"
+        />
+        <SocialLink
+          platform="facebook"
+          link="https://www.facebook.com/somethingborrowedsomethingblue"
+        />
+      </div>
+      <a href="mailto:dukesbsb@gmail.com">dukesbsb@gmail.com</a>
+    </footer>
   </body>
 </html>

@@ -1,0 +1,27 @@
+---
+const { href } = Astro.props;
+---
+
+<sbsb-link data-href={href}>
+  <a href={href} class="group uppercase">
+    <slot />
+    <span
+      class="sbsb-link-span block h-0.5 max-w-0 bg-white transition-all duration-500 group-hover:max-w-full"
+    ></span>
+  </a>
+</sbsb-link>
+
+<script>
+  class SbsbLink extends HTMLElement {
+    connectedCallback() {
+      const href = this.dataset.href;
+
+      if (window.location.pathname === href) {
+        const span = this.querySelector(".sbsb-link-span") as HTMLSpanElement;
+        span.style = "max-width: 100%;";
+      }
+    }
+  }
+
+  customElements.define("sbsb-link", SbsbLink);
+</script>

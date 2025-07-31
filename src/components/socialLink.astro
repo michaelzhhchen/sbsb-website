@@ -1,0 +1,14 @@
+---
+import Image from "astro/components/Image.astro";
+
+const { platform, link } = Astro.props;
+---
+
+<a href={link} class="rounded-full bg-white p-2">
+  <Image
+    src={`/social-icons/${platform}.svg`}
+    alt={`Icon for ${platform}`}
+    width={20}
+    height={20}
+  />
+</a>
