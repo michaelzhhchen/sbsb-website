@@ -1,0 +1,45 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Image from "astro/components/Image.astro";
+
+import aboutImage from "../assets/about.jpg";
+import logoImage from "../assets/logo.png";
+---
+
+<Layout title="About" img={aboutImage} alt="SBSB performing on stage">
+  <div class="flex flex-col items-center justify-start">
+    <h1 class="text-5xl">About</h1>
+    <Image src={logoImage} alt="SBSB logo" />
+  </div>
+  <div class="mt-10 flex flex-col items-center justify-start gap-5">
+    <div
+      class="flex flex-col gap-5 rounded-2xl bg-[#00000055] p-5 text-lg backdrop-blur-lg"
+    >
+      <p class="max-w-3xl">
+        Something Borrowed Something Blue is Duke University&apos;s co-ed
+        Christian a cappella group, consisting of students who love God and love
+        to sing. Originally founded in 1969 as a Christian folk band, SBSB
+        became an a cappella group in 1993 and adopted a new wedding-themed name
+        in 1998 to remind us that we, as the church, are the beloved bride of
+        Christ (Revelation 21). We exist primarily to glorify God and choose to
+        perform a wide variety of songs to communicate the love of Christ. Our
+        repertoire reflects aspects of God's character and includes music that
+        has meaningfully influenced our members' lives. Singing, however, is
+        just one part of being a member of SBSB — from vivacious game nights to
+        our annual Spring Break community service trip, SBSB blends fun,
+        service, and music, allowing us to grow as followers of Christ and as a
+        family of friends.
+      </p>
+      <p class="max-w-3xl">
+        SBSB is proud to be comprised of students of all different backgrounds
+        and identities. We are dedicated to loving one another as members of one
+        body in Christ following 1 John 4:7-21. Thus, SBSB adheres to Duke's
+        policy of non-discrimination and harassment: any discrimination and/or
+        harassment based on race, color, national origin, sex (including
+        pregnancy), gender, gender identity, gender expression, sexual
+        orientation, religion, genetic information, age, disability, or veteran
+        status is prohibited.
+      </p>
+    </div>
+  </div>
+</Layout>
