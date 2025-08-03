@@ -2,10 +2,10 @@
 import Airtable, { type Attachment } from "airtable";
 import { getSecret } from "astro:env/server";
 
-import Layout from "../layouts/Layout.astro";
+import Layout from "../../layouts/Layout.astro";
 import Image from "astro/components/Image.astro";
 
-import membersImage from "../assets/members.jpg";
+import membersImage from "../../assets/members.jpg";
 
 Airtable.configure({
   apiKey: getSecret("AIRTABLE_API_KEY"),
@@ -14,7 +14,7 @@ Airtable.configure({
 const base = Airtable.base(getSecret("AIRTABLE_BASE_ID")!);
 const membersTable = base.table("Members");
 
-const members = await membersTable.select({ view: "Displayed" }).all();
+const members = await membersTable.select({ view: "Current" }).all();
 ---
 
 <Layout title="Members" img={membersImage} alt="SBSB performing on stage">
@@ -63,5 +63,11 @@ const members = await membersTable.select({ view: "Displayed" }).all();
         ))
       }
     </div>
+    <a href="/members/alumni" class="group py-5 text-2xl">
+      See SBSB Alumni
+      <span
+        class="sbsb-link-span block h-0.5 max-w-0 bg-white transition-all duration-500 group-hover:max-w-full"
+      ></span>
+    </a>
   </div>
 </Layout>

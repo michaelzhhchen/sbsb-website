@@ -1,0 +1,48 @@
+---
+import Airtable, { type Attachment } from "airtable";
+import { getSecret } from "astro:env/server";
+
+import Layout from "../../layouts/Layout.astro";
+import Image from "astro/components/Image.astro";
+
+import membersImage from "../../assets/members.jpg";
+
+Airtable.configure({
+  apiKey: getSecret("AIRTABLE_API_KEY"),
+});
+
+const base = Airtable.base(getSecret("AIRTABLE_BASE_ID")!);
+const membersTable = base.table("Members");
+
+const alumni = await membersTable.select({ view: "Alumni" }).all();
+---
+
+<Layout title="Alumni" img={membersImage} alt="SBSB performing on stage">
+  <div class="flex flex-col items-center justify-start">
+    <div
+      class="grid grid-cols-5 gap-5 rounded-2xl bg-[#00000055] p-5 backdrop-blur-lg"
+    >
+      {
+        alumni.map((alum) => (
+          <>
+            <div class="flex flex-col items-center justify-center gap-1">
+              <Image
+                src={
+                  (alum.get("Picture") as Attachment[])[0].url ?? "/favicon.ico"
+                }
+                alt={`Picture of ${alum.get("Name")}`}
+                width={125}
+                height={125}
+              />
+              <p class="text-lg font-bold">{alum.get("Name")}</p>
+              <p class="text-lg">
+                '{alum.get("Graduation Year")?.toString().slice(2)} -
+                {alum.get("Part")}
+              </p>
+            </div>
+          </>
+        ))
+      }
+    </div>
+  </div>
+</Layout>

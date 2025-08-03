@@ -14,9 +14,16 @@ const { href } = Astro.props;
 <script>
   class SbsbLink extends HTMLElement {
     connectedCallback() {
-      const href = this.dataset.href;
+      const href = this.dataset.href ?? "/";
 
-      if (window.location.pathname === href) {
+      let isOnPage = false;
+      if (href === "/") {
+        isOnPage = window.location.pathname === "/";
+      } else {
+        isOnPage = window.location.pathname.includes(href);
+      }
+
+      if (isOnPage) {
         const span = this.querySelector(".sbsb-link-span") as HTMLSpanElement;
         span.style = "max-width: 100%;";
       }
