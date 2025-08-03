@@ -4,6 +4,7 @@ import "../styles/global.css";
 import { Image } from "astro:assets";
 import NavLink from "../components/navLink.astro";
 import SocialLink from "../components/socialLink.astro";
+import logoImage from "../assets/logo.png";
 
 const { title, img, alt } = Astro.props;
 ---
@@ -18,16 +19,19 @@ const { title, img, alt } = Astro.props;
   </head>
   <body class="flex min-h-screen flex-col text-white">
     <Image src={img} alt={alt} class="fixed -z-10 h-screen w-screen" />
-    <nav class="flex w-screen items-center justify-center gap-15 py-5 text-xl">
-      <NavLink href="/">Home</NavLink>
-      <NavLink href="/about">About</NavLink>
-      <NavLink href="/members">Members</NavLink>
-      <NavLink href="/live">Live</NavLink>
-      <NavLink href="/albums">Albums</NavLink>
-      <NavLink href="/donate">Donate</NavLink>
-      <NavLink href="/audition">Audition</NavLink>
-      <NavLink href="/contact">Contact</NavLink>
-    </nav>
+    <header class="flex flex-col items-center justify-center gap-5 py-5">
+      <Image src={logoImage} alt="SBSB logo" class="w-52" />
+      <nav class="flex w-screen items-center justify-center gap-15 text-xl">
+        <NavLink href="/">Home</NavLink>
+        <NavLink href="/about">About</NavLink>
+        <NavLink href="/members">Members</NavLink>
+        <NavLink href="/live">Live</NavLink>
+        <NavLink href="/albums">Albums</NavLink>
+        <NavLink href="/donate">Donate</NavLink>
+        <NavLink href="/audition">Audition</NavLink>
+        <NavLink href="/contact">Contact</NavLink>
+      </nav>
+    </header>
     <slot />
     <footer
       class="mt-auto grid grid-cols-3 items-center justify-items-center px-32 py-10"

@@ -1,19 +1,14 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Image from "astro/components/Image.astro";
 
 import homeImage from "../assets/home.jpg";
-import logoImage from "../assets/logo.png";
 ---
 
 <Layout title="Home" img={homeImage} alt="SBSB performing on stage">
-  <div class="flex flex-col items-center gap-10 pt-10">
-    <div class="flex items-center gap-2">
-      <Image src={logoImage} alt="SBSB logo" />
-      <h1 class="text-5xl font-bold">
-        Something Borrowed<br /> Something Blue
-      </h1>
-    </div>
+  <div class="flex flex-col items-center gap-7 pt-7">
+    <h1 class="text-center text-5xl font-bold">
+      Something Borrowed<br /> Something Blue
+    </h1>
     <p class="text-center text-2xl font-semibold italic">
       Duke University's Premiere Christian Co-ed A Capella Group
     </p>
