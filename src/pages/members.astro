@@ -1,0 +1,68 @@
+---
+import Airtable, { type Attachment } from "airtable";
+import { getSecret } from "astro:env/server";
+
+import Layout from "../layouts/Layout.astro";
+import Image from "astro/components/Image.astro";
+
+import membersImage from "../assets/members.jpg";
+
+Airtable.configure({
+  apiKey: getSecret("AIRTABLE_API_KEY"),
+});
+
+const base = Airtable.base(getSecret("AIRTABLE_BASE_ID")!);
+const membersTable = base.table("Members");
+
+const members = await membersTable.select({ view: "Displayed" }).all();
+---
+
+<Layout title="Members" img={membersImage} alt="SBSB performing on stage">
+  <h1 class="mb-10 text-center text-5xl">Members</h1>
+  <div class="flex flex-col items-center justify-start">
+    <div
+      class="flex max-w-3xl flex-col items-center justify-start gap-5 rounded-2xl bg-[#00000055] p-5 backdrop-blur-lg"
+    >
+      {
+        members.map((member, i) => (
+          <>
+            <div class="flex flex-col gap-3">
+              <div class="flex flex-row items-start justify-start gap-5">
+                <Image
+                  src={
+                    (member.get("Picture") as Attachment[])[0].url ??
+                    "/favicon.ico"
+                  }
+                  alt={`Picture of ${member.get("Name")}`}
+                  width={150}
+                  height={150}
+                  class="border-4 border-white"
+                />
+                <div>
+                  <p class="text-3xl font-bold">{member.get("Name")}</p>
+                  <p>{member.get("Role")}</p>
+                  <div class="mt-5 flex flex-row items-center gap-10">
+                    <div>
+                      <p class="font-bold">Year</p>
+                      <p>{member.get("Graduation Year")}</p>
+                    </div>
+                    <div>
+                      <p class="font-bold">Hometown</p>
+                      <p>{member.get("Hometown")}</p>
+                    </div>
+                    <div>
+                      <p class="font-bold">Part</p>
+                      <p>{member.get("Part")}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <p>{member.get("Bio")}</p>
+            </div>
+            {i != members.length - 1 && <hr class="h-[1px] w-full bg-white" />}
+          </>
+        ))
+      }
+    </div>
+  </div>
+</Layout>
