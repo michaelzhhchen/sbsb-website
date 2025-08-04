@@ -1,0 +1,110 @@
+---
+import Spotify from "spotify-web-api-node";
+import { getSecret } from "astro:env/server";
+import Image from "astro/components/Image.astro";
+
+import Layout from "../layouts/Layout.astro";
+import SocialLink from "../components/socialLink.astro";
+import albumsImage from "../assets/albums.jpg";
+
+const spotify = new Spotify({
+  clientId: getSecret("SPOTIFY_CLIENT_ID"),
+  clientSecret: getSecret("SPOTIFY_CLIENT_SECRET"),
+});
+
+await spotify.clientCredentialsGrant().then(
+  (data) => {
+    console.log(
+      `Acquired Spotify access token, expiring in ${data.body.expires_in} seconds.`,
+    );
+
+    spotify.setAccessToken(data.body.access_token);
+  },
+  (err) => {
+    console.log("Something went wrong when retrieving an access token", err);
+  },
+);
+
+const albumsRes = await spotify.getArtistAlbums("7hEZd0gUXJxxXGgMsIPmvG");
+const albums = albumsRes.body.items;
+
+const albumTracksPromises = albums.map((album) =>
+  spotify.getAlbumTracks(album.id),
+);
+const albumTracks = await Promise.allSettled(albumTracksPromises);
+
+const linksPromises = await albums.map((album) =>
+  fetch(
+    `https://api.song.link/v1-alpha.1/links?songIfSingle=true&platform=spotify&type=album&id=${album.id}`,
+  ).then((r) => r.json()),
+);
+const links = await Promise.allSettled(linksPromises);
+
+const timestampify = (ms: number) => {
+  const mins = Math.floor(ms / 1000 / 60);
+  const seconds = Math.round((ms - mins * 1000 * 60) / 1000);
+
+  return `${mins}:${seconds < 10 ? "0" : ""}${seconds}`;
+};
+---
+
+<Layout title="Albums" img={albumsImage} alt="SBSB performing on stage">
+  <div class="flex flex-col items-center gap-5">
+    {
+      albums.map((album, i) => (
+        <div class="flex w-1/2 flex-col items-center justify-start gap-5 rounded-2xl bg-[#00000066] p-5 backdrop-blur-xl">
+          <div class="grid w-full grid-cols-2 items-center justify-items-center">
+            <Image
+              src={album.images[0].url}
+              alt={`Album cover for ${album.name}`}
+              width={200}
+              height={200}
+            />
+            <div class="flex flex-col items-center justify-start gap-5">
+              <p class="text-center text-3xl font-bold">{album.name}</p>
+              <p class="text-2xl">{album.release_date.split("-")[0]}</p>
+              <div class="flex items-center justify-center gap-5">
+                {links[i].status === "fulfilled" && (
+                  <>
+                    <SocialLink
+                      platform="spotify"
+                      link={links[i].value.linksByPlatform.spotify.url}
+                    />
+                    {links[i].value.linksByPlatform.appleMusic && (
+                      <SocialLink
+                        platform="appleMusic"
+                        link={links[i].value.linksByPlatform.appleMusic.url}
+                      />
+                    )}
+                    {links[i].value.linksByPlatform.youtubeMusic && (
+                      <SocialLink
+                        platform="youtubeMusic"
+                        link={links[i].value.linksByPlatform.youtubeMusic.url}
+                      />
+                    )}
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <hr class="h-[1px] w-full bg-white" />
+
+          {(albumTracks[i].status === "fulfilled"
+            ? albumTracks[i].value.body.items
+            : []
+          ).map((track, i) => (
+            <div class="flex w-full items-start justify-between text-lg">
+              <div class="flex items-center gap-3">
+                <p class="min-w-8">{i + 1}</p>
+                <p>{track.name}</p>
+              </div>
+
+              <p>{timestampify(track.duration_ms)}</p>
+            </div>
+          ))}
+        </div>
+      ))
+    }
+  </div>
+</Layout>
