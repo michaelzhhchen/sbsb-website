@@ -9,6 +9,7 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@googleapis/youtube": "^28.0.0",
     "@tailwindcss/vite": "^4.1.11",
     "airtable": "^0.12.2",
     "astro": "^5.12.6",
