@@ -17,8 +17,8 @@ const { title, img, alt } = Astro.props;
     <meta name="generator" content={Astro.generator} />
     <title>{title} | SBSB</title>
   </head>
-  <body class="flex min-h-screen flex-col text-white">
-    <Image src={img} alt={alt} class="fixed -z-10 h-screen w-screen" />
+  <body class="flex min-h-screen flex-col bg-black text-white">
+    {img && <Image src={img} alt={alt} class="fixed -z-10 h-screen w-screen" />}
     <header class="flex flex-col items-center justify-center gap-5 py-5">
       <Image src={logoImage} alt="SBSB logo" class="w-52" />
       <nav class="flex w-screen items-center justify-center gap-15 text-xl">

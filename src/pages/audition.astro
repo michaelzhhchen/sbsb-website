@@ -1,0 +1,59 @@
+---
+import Image from "astro/components/Image.astro";
+
+import Layout from "../layouts/Layout.astro";
+import auditionImage from "../assets/audition.jpg";
+---
+
+<Layout title="Audition" alt="SBSB performing on stage">
+  <div class="mt-10 flex flex-col items-center justify-start gap-5">
+    <div
+      class="relative flex flex-col gap-5 rounded-2xl bg-[#00000066] p-5 text-lg backdrop-blur-xl"
+    >
+      <p class="px-36">
+        Every year, Something Borrowed Something Blue looks for new students to
+        join its tight-knit family of unique voices and personalities. As a
+        group, we cherish the diverse symphony of musical talent that God has
+        brought to Duke for his beautiful and mysterious purposes, and we highly
+        encourage both those who are well-versed in and new to a cappella to
+        give auditions a try.
+      </p>
+      <p class="px-36">
+        <span class="font-bold">Audition</span><br />
+        Drink lots of water (no dairy!), and send us a video singing the <span
+          class="underline">Verse and Chorus of ANY SONG</span
+        > of your choice. While your options may seem endless, think about songs
+        that allow you to comfortably display your vocal range and express your emotions.
+        We want to meet YOU at your audition, so it's important to choose a song
+        that fits your voice. We will also evaluate your sightreading ability, ear
+        for pitch, and - most importantly - favorite candy.
+      </p>
+      <p class="px-36">
+        <span class="font-bold">Questions</span><br />
+        Feel free to shoot us an email at <a
+          href="mailto:dukesbsb@gmail.com"
+          class="underline">dukesbsb@gmail.com</a
+        >. For a taste of life in SBSB, check out our Instagram!
+      </p>
+      <p class="px-36">
+        The purpose of Something Borrowed Something Blue, as stated in our
+        constitution, is “To glorify God through music and community.” We pray
+        at the start and end of each rehearsal, sing worship music, and engage
+        in discussions about the Bible and how we can best live as Jesus taught
+        us, which is to love God and one another. While we welcome all to our
+        group, we ask that potential new members reflect upon their own
+        spirituality and whether or not they would be comfortable in this type
+        of environment.
+      </p>
+      <p class="px-36">
+        As a group, we are praying for wisdom and guidance for this upcoming
+        year. We can't wait to see what is in store for you!
+      </p>
+    </div>
+    <Image
+      src={auditionImage}
+      alt="SBSB performing on stage"
+      class="absolute bottom-0 -z-10"
+    />
+  </div>
+</Layout>
