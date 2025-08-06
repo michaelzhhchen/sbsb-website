@@ -1,0 +1,44 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+import donateImage from "../assets/donate.jpg";
+---
+
+<Layout title="Donate" img={donateImage} alt="SBSB performing on stage">
+  <div class="mt-10 flex flex-col items-center justify-start gap-5">
+    <div class="grid grid-cols-2 justify-items-center gap-5">
+      <div
+        class="flex flex-col justify-center rounded-2xl bg-[#00000066] px-20 py-5 text-lg backdrop-blur-xl"
+      >
+        <p class="text-xl font-bold">Our Mission</p>
+        <p>
+          Every year, we have the opportunity to spread the love and joy of
+          Christ in and beyond Duke’s campus by hosting concerts and informal
+          performances, singing at off-campus gigs, and producing albums. It has
+          been such a joy for us to share our experiences and journeys with
+          others, and we could not do any of this without the support of our
+          friends, families, and supporters. We would be honored for you to
+          partner with us prayerfully and financially and, in doing so, see the
+          message of the hope we have in Christ reach far beyond the corners of
+          this campus.
+        </p>
+      </div>
+      <div
+        class="rounded-2xl bg-[#00000066] px-20 py-5 text-lg backdrop-blur-xl"
+      >
+        <p class="text-xl font-bold">Checks</p>
+        <p>
+          Make it out to "Something Borrowed Something Blue" and send it to the
+          address below. Thank you for your support!
+        </p>
+        <br />
+        <p>The Lord bless you and keep you!</p>
+        <br />
+        <p>
+          Something Borrowed Something Blue<br /> 407 Towerview Road<br /> PO Box
+          95592<br />Durham, NC 27710
+        </p>
+      </div>
+    </div>
+  </div>
+</Layout>
