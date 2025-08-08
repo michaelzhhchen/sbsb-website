@@ -1,0 +1,22 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Socials from "../components/socials.astro";
+
+import aboutImage from "../assets/about.jpg";
+---
+
+<Layout title="Contact" img={aboutImage} alt="SBSB performing on stage">
+  <div class="mt-10 flex flex-col items-center justify-start gap-5">
+    <div
+      class="flex flex-col items-center gap-5 rounded-2xl bg-[#00000066] p-5 text-lg backdrop-blur-xl"
+    >
+      <p class="max-w-3xl">
+        We'd love to talk! Reach out to us via email at <a
+          class="underline"
+          href="mailto:dukesbsb@gmail.com">dukesbsb@gmail.com</a
+        >, or on social media:
+      </p>
+      <Socials />
+    </div>
+  </div>
+</Layout>

@@ -3,7 +3,7 @@ import "../styles/global.css";
 
 import { Image } from "astro:assets";
 import NavLink from "../components/navLink.astro";
-import SocialLink from "../components/socialLink.astro";
+import Socials from "../components/socials.astro";
 import logoImage from "../assets/logo.png";
 
 const { title, img, alt } = Astro.props;
@@ -37,20 +37,7 @@ const { title, img, alt } = Astro.props;
       class="mt-auto grid grid-cols-3 items-center justify-items-center px-32 py-10"
     >
       <p>© Something Borrowed Something Blue</p>
-      <div class="flex items-center justify-start gap-2">
-        <SocialLink
-          platform="youtube"
-          link="https://www.youtube.com/user/borrowednblue"
-        />
-        <SocialLink
-          platform="spotify"
-          link="https://open.spotify.com/artist/7hEZd0gUXJxxXGgMsIPmvG?si=zq80GAn4RfWHTEEztV8-wg"
-        />
-        <SocialLink
-          platform="facebook"
-          link="https://www.facebook.com/somethingborrowedsomethingblue"
-        />
-      </div>
+      <Socials />
       <a href="mailto:dukesbsb@gmail.com">dukesbsb@gmail.com</a>
     </footer>
   </body>
