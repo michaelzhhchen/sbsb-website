@@ -1,48 +1,29 @@
 ---
-import Spotify from "spotify-web-api-node";
-import { getSecret } from "astro:env/server";
 import Image from "astro/components/Image.astro";
+import type { Records, FieldSet, Attachment } from "airtable";
+import airtable from "../utils/airtable";
 
 import Layout from "../layouts/Layout.astro";
 import SocialLink from "../components/socialLink.astro";
 import albumsImage from "../assets/albums.jpg";
 
-const spotify = new Spotify({
-  clientId: getSecret("SPOTIFY_CLIENT_ID"),
-  clientSecret: getSecret("SPOTIFY_CLIENT_SECRET"),
-});
+const albumsTable = airtable.table("Albums");
+const songsTable = airtable.table("Songs");
 
-await spotify.clientCredentialsGrant().then(
-  (data) => {
-    console.log(
-      `Acquired Spotify access token, expiring in ${data.body.expires_in} seconds.`,
-    );
+const albums = await albumsTable
+  .select({ sort: [{ field: "Release Year", direction: "desc" }] })
+  .all();
 
-    spotify.setAccessToken(data.body.access_token);
-  },
-  (err) => {
-    console.log("Something went wrong when retrieving an access token", err);
-  },
-);
+const songsByAlbum: { [id: string]: Records<FieldSet> } = {};
+for (const album of albums) {
+  songsByAlbum[album.id] = await Promise.all(
+    (album.get("Songs") as string[]).map((s) => songsTable.find(s)),
+  );
+}
 
-const albumsRes = await spotify.getArtistAlbums("7hEZd0gUXJxxXGgMsIPmvG");
-const albums = albumsRes.body.items;
-
-const albumTracksPromises = albums.map((album) =>
-  spotify.getAlbumTracks(album.id),
-);
-const albumTracks = await Promise.allSettled(albumTracksPromises);
-
-const linksPromises = await albums.map((album) =>
-  fetch(
-    `https://api.song.link/v1-alpha.1/links?songIfSingle=true&platform=spotify&type=album&id=${album.id}`,
-  ).then((r) => r.json()),
-);
-const links = await Promise.allSettled(linksPromises);
-
-const timestampify = (ms: number) => {
-  const mins = Math.floor(ms / 1000 / 60);
-  const seconds = Math.round((ms - mins * 1000 * 60) / 1000);
+const timestampify = (s: number) => {
+  const mins = Math.floor(s / 60);
+  const seconds = Math.round(s - mins * 60);
 
   return `${mins}:${seconds < 10 ? "0" : ""}${seconds}`;
 };
@@ -51,38 +32,35 @@ const timestampify = (ms: number) => {
 <Layout title="Albums" img={albumsImage} alt="SBSB performing on stage">
   <div class="flex flex-col items-center gap-5">
     {
-      albums.map((album, i) => (
+      albums.map((album) => (
         <div class="flex w-1/2 flex-col items-center justify-start gap-5 rounded-2xl bg-[#00000066] p-5 backdrop-blur-xl">
           <div class="grid w-full grid-cols-2 items-center justify-items-center">
-            <Image
-              src={album.images[0].url}
-              alt={`Album cover for ${album.name}`}
-              width={200}
-              height={200}
-            />
+            {album.get("Cover") && (
+              <Image
+                src={((album.get("Cover") as Attachment[]) ?? [])[0]?.url}
+                alt={`Album cover for ${album.get("Name")}`}
+                width={200}
+                height={200}
+              />
+            )}
             <div class="flex flex-col items-center justify-start gap-5">
-              <p class="text-center text-3xl font-bold">{album.name}</p>
-              <p class="text-2xl">{album.release_date.split("-")[0]}</p>
+              <p class="text-center text-3xl font-bold">{album.get("Name")}</p>
+              <p class="text-2xl">{album.get("Release Year")}</p>
               <div class="flex items-center justify-center gap-5">
-                {links[i].status === "fulfilled" && (
-                  <>
-                    <SocialLink
-                      platform="spotify"
-                      link={links[i].value.linksByPlatform.spotify.url}
-                    />
-                    {links[i].value.linksByPlatform.appleMusic && (
-                      <SocialLink
-                        platform="appleMusic"
-                        link={links[i].value.linksByPlatform.appleMusic.url}
-                      />
-                    )}
-                    {links[i].value.linksByPlatform.youtubeMusic && (
-                      <SocialLink
-                        platform="youtubeMusic"
-                        link={links[i].value.linksByPlatform.youtubeMusic.url}
-                      />
-                    )}
-                  </>
+                {album.get("Spotify") && (
+                  <SocialLink platform="spotify" link={album.get("Spotify")} />
+                )}
+                {album.get("Apple Music") && (
+                  <SocialLink
+                    platform="appleMusic"
+                    link={album.get("Apple Music")}
+                  />
+                )}
+                {album.get("YouTube Music") && (
+                  <SocialLink
+                    platform="youtubeMusic"
+                    link={album.get("YouTube Music")}
+                  />
                 )}
               </div>
             </div>
@@ -90,17 +68,14 @@ const timestampify = (ms: number) => {
 
           <hr class="h-[1px] w-full bg-white" />
 
-          {(albumTracks[i].status === "fulfilled"
-            ? albumTracks[i].value.body.items
-            : []
-          ).map((track, i) => (
+          {songsByAlbum[album.id].map((track) => (
             <div class="flex w-full items-start justify-between text-lg">
               <div class="flex items-center gap-3">
-                <p class="min-w-8">{i + 1}</p>
-                <p>{track.name}</p>
+                <p class="min-w-8">{track.get("Track Number")}</p>
+                <p>{track.get("Name")}</p>
               </div>
 
-              <p>{timestampify(track.duration_ms)}</p>
+              <p>{timestampify(track.get("Duration") as number)}</p>
             </div>
           ))}
         </div>
