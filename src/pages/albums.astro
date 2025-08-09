@@ -6,6 +6,7 @@ import airtable from "../utils/airtable";
 import Layout from "../layouts/Layout.astro";
 import SocialLink from "../components/socialLink.astro";
 import albumsImage from "../assets/albums.jpg";
+import playImage from "../assets/play.svg";
 
 const albumsTable = airtable.table("Albums");
 const songsTable = airtable.table("Songs");
@@ -71,7 +72,19 @@ const timestampify = (s: number) => {
           {songsByAlbum[album.id].map((track) => (
             <div class="flex w-full items-start justify-between text-lg">
               <div class="flex items-center gap-3">
-                <p class="min-w-8">{track.get("Track Number")}</p>
+                <p class="group flex h-7 w-7 items-center justify-center rounded-full bg-white p-1 text-center text-sm font-semibold text-black">
+                  <span class={track.get("Audio") ? "group-hover:hidden" : ""}>
+                    {track.get("Track Number")}
+                  </span>
+                  {track.get("Audio") && (
+                    <button
+                      class="playButton hidden h-3 w-3 group-hover:block"
+                      data-url={(track.get("Audio") as Attachment[])[0].url}
+                    >
+                      <Image src={playImage} alt="Play icon" />
+                    </button>
+                  )}
+                </p>
                 <p>{track.get("Name")}</p>
               </div>
 
@@ -83,3 +96,15 @@ const timestampify = (s: number) => {
     }
   </div>
 </Layout>
+
+<script>
+  document.querySelectorAll(".playButton").forEach((e) => {
+    e.addEventListener("click", (e) => {
+      const audioUrl = (e.target as HTMLButtonElement).dataset.url;
+      if (audioUrl) {
+        const audio = new Audio(audioUrl);
+        audio.play();
+      }
+    });
+  });
+</script>
