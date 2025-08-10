@@ -15,6 +15,18 @@ const { title, img, alt } = Astro.props;
     <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
+
+    <meta property="og:type" content="website" />
+    <meta name="apple-mobile-web-app-title" content="SBSB" />
+    <meta property="og:site_name" content="SBSB" />
+    <meta property="og:title" content={`${title} | SBSB`} />
+    <meta
+      name="description"
+      property="og:description"
+      content="Duke University's Premiere Christian Co-ed A Capella Group"
+    />
+    <meta property="og:image" content="/logo.png" />
+
     <title>{title} | SBSB</title>
   </head>
   <body class="flex min-h-screen flex-col bg-black text-white">
