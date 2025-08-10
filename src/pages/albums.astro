@@ -7,7 +7,6 @@ import Layout from "../layouts/Layout.astro";
 import SocialLink from "../components/socialLink.astro";
 import albumsImage from "../assets/albums.jpg";
 import playImage from "../assets/play.svg";
-import shareImage from "../assets/share.svg";
 
 const albumsTable = airtable.table("Albums");
 const songsTable = airtable.table("Songs");
@@ -71,15 +70,15 @@ const timestampify = (s: number) => {
           <hr class="h-[1px] w-full bg-white" />
 
           {songsByAlbum[album.id].map((track) => (
-            <div class="flex h-9 w-full items-center justify-between text-lg">
+            <div class="group flex h-9 w-full items-center justify-between text-lg">
               <div class="flex items-center gap-3">
-                <p class="group flex h-7 w-7 items-center justify-center rounded-full bg-white p-1 text-center text-sm font-semibold text-black">
+                <p class="flex h-7 w-7 items-center justify-center rounded-full bg-white p-1 text-center text-sm font-semibold text-black">
                   <span class={track.get("Audio") ? "group-hover:hidden" : ""}>
                     {track.get("Track Number")}
                   </span>
                   {track.get("Audio") && (
                     <button
-                      class="playButton hidden h-3 w-3 group-hover:block"
+                      class="playButton hidden h-3 w-3 group-hover:block group-focus:block focus:block"
                       data-url={(track.get("Audio") as Attachment[])[0].url}
                     >
                       <Image src={playImage} alt="Play icon" />
@@ -89,14 +88,8 @@ const timestampify = (s: number) => {
                 <p>{track.get("Name")}</p>
               </div>
 
-              <div class="flex flex-row-reverse items-center">
-                <p class="min-w-12">
-                  {timestampify(track.get("Duration") as number)}
-                </p>
-                <button class="peer cursor-pointer px-3">
-                  <Image src={shareImage} alt="Share icon" class="h-4 w-4" />
-                </button>
-                <div class="hidden gap-3 justify-self-start peer-hover:flex peer-focus:flex hover:flex">
+              <div class="flex items-center gap-3">
+                <div class="flex gap-3 justify-self-start opacity-0 transition-all duration-200 group-hover:opacity-100 group-focus:opacity-100 focus:opacity-100">
                   {track.get("Spotify") && (
                     <SocialLink
                       platform="spotify"
@@ -116,6 +109,9 @@ const timestampify = (s: number) => {
                     />
                   )}
                 </div>
+                <p class="min-w-12">
+                  {timestampify(track.get("Duration") as number)}
+                </p>
               </div>
             </div>
           ))}
