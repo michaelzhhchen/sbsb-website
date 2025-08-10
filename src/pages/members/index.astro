@@ -18,7 +18,7 @@ const members = await membersTable.select({ view: "Current" }).all();
 ---
 
 <Layout title="Members" img={membersImage} alt="SBSB performing on stage">
-  <div class="flex flex-col items-center justify-start">
+  <div class="mx-5 flex flex-col items-center justify-start">
     <div
       class="flex max-w-3xl flex-col items-center justify-start gap-5 rounded-2xl bg-[#00000055] p-5 backdrop-blur-lg"
     >
@@ -40,7 +40,7 @@ const members = await membersTable.select({ view: "Current" }).all();
                 <div>
                   <p class="text-3xl font-bold">{member.get("Name")}</p>
                   <p>{member.get("Role")}</p>
-                  <div class="mt-5 flex flex-row items-center gap-10">
+                  <div class="mt-5 hidden flex-row items-center gap-x-10 gap-y-1 md:flex">
                     <div>
                       <p class="font-bold">Year</p>
                       <p>{member.get("Graduation Year")}</p>
@@ -54,6 +54,20 @@ const members = await membersTable.select({ view: "Current" }).all();
                       <p>{member.get("Part")}</p>
                     </div>
                   </div>
+                </div>
+              </div>
+              <div class="mt-5 flex flex-row items-center gap-x-10 gap-y-1 md:hidden">
+                <div>
+                  <p class="font-bold">Year</p>
+                  <p>{member.get("Graduation Year")}</p>
+                </div>
+                <div>
+                  <p class="font-bold">Hometown</p>
+                  <p>{member.get("Hometown")}</p>
+                </div>
+                <div>
+                  <p class="font-bold">Part</p>
+                  <p>{member.get("Part")}</p>
                 </div>
               </div>
               <p>{member.get("Bio")}</p>

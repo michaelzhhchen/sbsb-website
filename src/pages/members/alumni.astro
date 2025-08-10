@@ -18,9 +18,9 @@ const alumni = await membersTable.select({ view: "Alumni" }).all();
 ---
 
 <Layout title="Alumni" img={membersImage} alt="SBSB performing on stage">
-  <div class="flex flex-col items-center justify-start">
+  <div class="mx-5 flex flex-col items-center justify-start">
     <div
-      class="grid grid-cols-5 gap-5 rounded-2xl bg-[#00000055] p-5 backdrop-blur-lg"
+      class="grid grid-cols-4 gap-5 rounded-2xl bg-[#00000055] p-5 backdrop-blur-lg md:grid-cols-5"
     >
       {
         alumni.map((alum) => (
@@ -34,8 +34,10 @@ const alumni = await membersTable.select({ view: "Alumni" }).all();
                 width={125}
                 height={125}
               />
-              <p class="text-lg font-bold">{alum.get("Name")}</p>
-              <p class="text-lg">
+              <p class="text-md text-center font-bold md:text-lg">
+                {alum.get("Name")}
+              </p>
+              <p class="text-md text-center md:text-lg">
                 '{alum.get("Graduation Year")?.toString().slice(2)} -
                 {alum.get("Part")}
               </p>

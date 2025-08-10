@@ -5,10 +5,10 @@ import donateImage from "../assets/donate.jpg";
 ---
 
 <Layout title="Donate" img={donateImage} alt="SBSB performing on stage">
-  <div class="mt-10 flex flex-col items-center justify-start gap-5">
-    <div class="grid grid-cols-2 justify-items-center gap-5">
+  <div class="mx-5 mt-10 flex flex-col items-center justify-start gap-5">
+    <div class="grid grid-cols-1 justify-items-center gap-5 md:grid-cols-2">
       <div
-        class="flex flex-col justify-center rounded-2xl bg-[#00000066] px-20 py-5 text-lg backdrop-blur-xl"
+        class="text-md flex flex-col justify-center rounded-2xl bg-[#00000066] px-20 py-5 backdrop-blur-xl md:text-lg"
       >
         <p class="text-xl font-bold">Our Mission</p>
         <p>
@@ -24,7 +24,7 @@ import donateImage from "../assets/donate.jpg";
         </p>
       </div>
       <div
-        class="rounded-2xl bg-[#00000066] px-20 py-5 text-lg backdrop-blur-xl"
+        class="text-md rounded-2xl bg-[#00000066] px-20 py-5 backdrop-blur-xl md:text-lg"
       >
         <p class="text-xl font-bold">Checks</p>
         <p>
@@ -41,7 +41,7 @@ import donateImage from "../assets/donate.jpg";
       </div>
     </div>
     <p
-      class="mx-20 rounded-2xl bg-[#00000066] p-2 text-center text-lg italic backdrop-blur-xl"
+      class="text-md mx-20 rounded-2xl bg-[#00000066] p-2 text-center italic backdrop-blur-xl md:text-lg"
     >
       Note: Because Something Borrowed Something Blue is not listed as an
       official 501c3 charity by the IRS, all monetary contributions are

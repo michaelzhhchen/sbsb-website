@@ -34,7 +34,7 @@ const timestampify = (s: number) => {
   <div class="flex flex-col items-center gap-5">
     {
       albums.map((album) => (
-        <div class="flex w-1/2 flex-col items-center justify-start gap-5 rounded-2xl bg-[#00000066] p-5 backdrop-blur-xl">
+        <div class="flex w-5/6 flex-col items-center justify-start gap-5 rounded-2xl bg-[#00000066] p-5 backdrop-blur-xl md:w-1/2">
           <div class="grid w-full grid-cols-2 items-center justify-items-center">
             {album.get("Cover") && (
               <Image
@@ -47,7 +47,7 @@ const timestampify = (s: number) => {
             <div class="flex flex-col items-center justify-start gap-5">
               <p class="text-center text-3xl font-bold">{album.get("Name")}</p>
               <p class="text-2xl">{album.get("Release Year")}</p>
-              <div class="flex items-center justify-center gap-5">
+              <div class="hidden items-center justify-center gap-5 md:flex">
                 {album.get("Spotify") && (
                   <SocialLink platform="spotify" link={album.get("Spotify")} />
                 )}
@@ -67,18 +67,36 @@ const timestampify = (s: number) => {
             </div>
           </div>
 
+          <div class="flex items-center justify-center gap-5 md:hidden">
+            {album.get("Spotify") && (
+              <SocialLink platform="spotify" link={album.get("Spotify")} />
+            )}
+            {album.get("Apple Music") && (
+              <SocialLink
+                platform="appleMusic"
+                link={album.get("Apple Music")}
+              />
+            )}
+            {album.get("YouTube Music") && (
+              <SocialLink
+                platform="youtubeMusic"
+                link={album.get("YouTube Music")}
+              />
+            )}
+          </div>
+
           <hr class="h-[1px] w-full bg-white" />
 
           {songsByAlbum[album.id].map((track) => (
-            <div class="group flex h-9 w-full items-center justify-between text-lg">
+            <div class="group text-md flex min-h-9 w-full items-center justify-between md:text-lg">
               <div class="flex items-center gap-3">
-                <p class="flex h-7 w-7 items-center justify-center rounded-full bg-white p-1 text-center text-sm font-semibold text-black">
+                <p class="flex h-7 min-w-7 items-center justify-center rounded-full bg-white p-1 text-center text-sm font-semibold text-black">
                   <span class={track.get("Audio") ? "group-hover:hidden" : ""}>
                     {track.get("Track Number")}
                   </span>
                   {track.get("Audio") && (
                     <button
-                      class="playButton hidden h-3 w-3 group-hover:block group-focus:block focus:block"
+                      class="playButton hidden h-3 w-3 group-focus-within:block group-hover:block group-focus:block focus:block"
                       data-url={(track.get("Audio") as Attachment[])[0].url}
                     >
                       <Image src={playImage} alt="Play icon" />
@@ -89,7 +107,7 @@ const timestampify = (s: number) => {
               </div>
 
               <div class="flex items-center gap-3">
-                <div class="flex gap-3 justify-self-start opacity-0 transition-all duration-200 group-hover:opacity-100 group-focus:opacity-100 focus:opacity-100">
+                <div class="flex gap-3 justify-self-start opacity-0 transition-all duration-200 group-focus-within:opacity-100 group-hover:opacity-100 group-focus:opacity-100 focus:opacity-100">
                   {track.get("Spotify") && (
                     <SocialLink
                       platform="spotify"

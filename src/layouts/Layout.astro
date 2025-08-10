@@ -18,10 +18,20 @@ const { title, img, alt } = Astro.props;
     <title>{title} | SBSB</title>
   </head>
   <body class="flex min-h-screen flex-col bg-black text-white">
-    {img && <Image src={img} alt={alt} class="fixed -z-10 h-screen w-screen" />}
+    {
+      img && (
+        <Image
+          src={img}
+          alt={alt}
+          class="fixed -z-10 h-screen w-screen object-cover"
+        />
+      )
+    }
     <header class="flex flex-col items-center justify-center gap-5 py-5">
       <Image src={logoImage} alt="SBSB logo" class="w-52" />
-      <nav class="flex w-screen items-center justify-center gap-15 text-xl">
+      <nav
+        class="flex w-screen flex-wrap items-center justify-center gap-x-15 gap-y-1 text-xl"
+      >
         <NavLink href="/">Home</NavLink>
         <NavLink href="/about">About</NavLink>
         <NavLink href="/members">Members</NavLink>
@@ -36,9 +46,9 @@ const { title, img, alt } = Astro.props;
     </header>
     <slot />
     <footer
-      class="mt-auto grid grid-cols-3 items-center justify-items-center px-32 py-10"
+      class="mt-auto grid grid-cols-1 items-center justify-items-center gap-3 px-32 py-10 md:grid-cols-3"
     >
-      <p>© Something Borrowed Something Blue</p>
+      <p class="text-center">© Something Borrowed Something Blue</p>
       <Socials />
       <a href="mailto:dukesbsb@gmail.com">dukesbsb@gmail.com</a>
     </footer>
