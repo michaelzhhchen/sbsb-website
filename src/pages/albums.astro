@@ -88,48 +88,69 @@ const timestampify = (s: number) => {
           <hr class="h-[1px] w-full bg-white" />
 
           {songsByAlbum[album.id].map((track) => (
-            <div class="group text-md flex min-h-9 w-full items-center justify-between md:text-lg">
-              <div class="flex items-center gap-3">
-                <p class="flex h-7 min-w-7 items-center justify-center rounded-full bg-white p-1 text-center text-sm font-semibold text-black">
-                  <span class={track.get("Audio") ? "group-hover:hidden" : ""}>
-                    {track.get("Track Number")}
-                  </span>
-                  {track.get("Audio") && (
-                    <button
-                      class="playButton hidden h-3 w-3 group-focus-within:block group-hover:block group-focus:block focus:block"
-                      data-url={(track.get("Audio") as Attachment[])[0].url}
+            <div class="sbsbTrack">
+              <div class="group text-md flex min-h-9 w-full items-center justify-between md:text-lg">
+                <div class="flex items-center gap-3">
+                  <p class="flex h-7 min-w-7 items-center justify-center rounded-full bg-white p-1 text-center text-sm font-semibold text-black">
+                    <span
+                      class={track.get("Audio") ? "group-hover:hidden" : ""}
                     >
-                      <Image src={playImage} alt="Play icon" />
-                    </button>
-                  )}
-                </p>
-                <p>{track.get("Name")}</p>
-              </div>
-
-              <div class="flex items-center gap-3">
-                <div class="flex gap-3 justify-self-start opacity-0 transition-all duration-200 group-focus-within:opacity-100 group-hover:opacity-100 group-focus:opacity-100 focus:opacity-100">
-                  {track.get("Spotify") && (
-                    <SocialLink
-                      platform="spotify"
-                      link={track.get("Spotify")}
-                    />
-                  )}
-                  {track.get("Apple Music") && (
-                    <SocialLink
-                      platform="appleMusic"
-                      link={track.get("Apple Music")}
-                    />
-                  )}
-                  {track.get("YouTube Music") && (
-                    <SocialLink
-                      platform="youtubeMusic"
-                      link={track.get("YouTube Music")}
-                    />
-                  )}
+                      {track.get("Track Number")}
+                    </span>
+                    {track.get("Audio") && (
+                      <button
+                        class="playButton hidden h-3 w-3 group-focus-within:block group-hover:block group-focus:block focus:block"
+                        data-url={(track.get("Audio") as Attachment[])[0].url}
+                      >
+                        <Image src={playImage} alt="Play icon" />
+                      </button>
+                    )}
+                  </p>
+                  <p>{track.get("Name")}</p>
                 </div>
-                <p class="min-w-12">
-                  {timestampify(track.get("Duration") as number)}
-                </p>
+
+                <div class="flex items-center gap-3">
+                  <div class="flex gap-3 justify-self-start opacity-0 transition-all duration-200 group-focus-within:opacity-100 group-hover:opacity-100 group-focus:opacity-100 focus:opacity-100">
+                    {track.get("Spotify") && (
+                      <SocialLink
+                        platform="spotify"
+                        link={track.get("Spotify")}
+                      />
+                    )}
+                    {track.get("Apple Music") && (
+                      <SocialLink
+                        platform="appleMusic"
+                        link={track.get("Apple Music")}
+                      />
+                    )}
+                    {track.get("YouTube Music") && (
+                      <SocialLink
+                        platform="youtubeMusic"
+                        link={track.get("YouTube Music")}
+                      />
+                    )}
+                  </div>
+                  <p class="min-w-12">
+                    {timestampify(track.get("Duration") as number)}
+                  </p>
+                </div>
+              </div>
+              <div class="trackLinks hidden w-full items-center justify-center gap-3">
+                {track.get("Spotify") && (
+                  <SocialLink platform="spotify" link={track.get("Spotify")} />
+                )}
+                {track.get("Apple Music") && (
+                  <SocialLink
+                    platform="appleMusic"
+                    link={track.get("Apple Music")}
+                  />
+                )}
+                {track.get("YouTube Music") && (
+                  <SocialLink
+                    platform="youtubeMusic"
+                    link={track.get("YouTube Music")}
+                  />
+                )}
               </div>
             </div>
           ))}
@@ -149,4 +170,19 @@ const timestampify = (s: number) => {
       }
     });
   });
+
+  if (window.innerWidth < 768) {
+    document.querySelectorAll(".sbsbTrack").forEach((e) => {
+      e.addEventListener("click", (ev) => {
+        const links = e.querySelector(".trackLinks");
+        if (links?.classList.contains("hidden")) {
+          links.classList.remove("hidden");
+          links.classList.add("flex");
+        } else {
+          links?.classList.remove("flex");
+          links?.classList.add("hidden");
+        }
+      });
+    });
+  }
 </script>
