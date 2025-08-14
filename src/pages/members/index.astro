@@ -20,16 +20,16 @@ const members = await membersTable.select({ view: "Current" }).all();
 <Layout title="Members" img={membersImage} alt="SBSB performing on stage">
   <div class="mx-5 flex flex-col items-center justify-start">
     <div
-      class="flex max-w-3xl flex-col items-center justify-start gap-5 rounded-2xl bg-[#00000055] p-5 backdrop-blur-lg"
+      class="flex max-w-3xl flex-col items-center justify-start gap-10 rounded-2xl bg-[#00000055] p-5 backdrop-blur-lg"
     >
       {
         members.map((member, i) => (
           <>
-            <div class="flex flex-col gap-3">
+            <div class="flex w-full flex-col gap-3">
               <div class="flex flex-row items-start justify-start gap-5">
                 <Image
                   src={
-                    (member.get("Picture") as Attachment[])[0].url ??
+                    ((member.get("Picture") as Attachment[]) ?? [])[0]?.url ??
                     "/favicon.ico"
                   }
                   alt={`Picture of ${member.get("Name")}`}
@@ -47,7 +47,7 @@ const members = await membersTable.select({ view: "Current" }).all();
                     </div>
                     <div>
                       <p class="font-bold">Hometown</p>
-                      <p>{member.get("Hometown")}</p>
+                      <p>{member.get("Hometown") ?? "-"}</p>
                     </div>
                     <div>
                       <p class="font-bold">Part</p>
