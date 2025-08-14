@@ -20,7 +20,7 @@ const members = await membersTable.select({ view: "Current" }).all();
 <Layout title="Members" img={membersImage} alt="SBSB performing on stage">
   <div class="mx-5 flex flex-col items-center justify-start">
     <div
-      class="flex max-w-3xl flex-col items-center justify-start gap-15 rounded-2xl bg-[#00000055] p-5 backdrop-blur-lg"
+      class="grid max-w-11/12 grid-cols-1 justify-start gap-15 rounded-2xl bg-[#00000055] p-5 backdrop-blur-lg md:grid-cols-2"
     >
       {
         members.map((member, i) => (
@@ -38,7 +38,9 @@ const members = await membersTable.select({ view: "Current" }).all();
                   class="border-4 border-white"
                 />
                 <div>
-                  <p class="text-3xl font-bold">{member.get("Name")}</p>
+                  <p class="text-2xl font-bold md:text-3xl">
+                    {member.get("Name")}
+                  </p>
                   <p>{member.get("Role")}</p>
                   <div class="mt-5 hidden flex-row items-center gap-x-10 gap-y-1 md:flex">
                     <div>
