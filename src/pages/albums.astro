@@ -6,7 +6,6 @@ import airtable from "../utils/airtable";
 import Layout from "../layouts/Layout.astro";
 import SocialLink from "../components/socialLink.astro";
 import albumsImage from "../assets/albums.jpg";
-import playImage from "../assets/play.svg";
 
 const albumsTable = airtable.table("Albums");
 const songsTable = airtable.table("Songs");
@@ -93,7 +92,11 @@ const timestampify = (s: number) => {
                 <div class="flex items-center gap-3">
                   <p class="flex h-7 min-w-7 items-center justify-center rounded-full bg-white p-1 text-center text-sm font-semibold text-black">
                     <span
-                      class={track.get("Audio") ? "group-hover:hidden" : ""}
+                      class={
+                        track.get("Audio")
+                          ? "group-focus-within:hidden group-hover:hidden"
+                          : ""
+                      }
                     >
                       {track.get("Track Number")}
                     </span>
@@ -102,7 +105,12 @@ const timestampify = (s: number) => {
                         class="playButton hidden h-3 w-3 group-focus-within:block group-hover:block group-focus:block focus:block"
                         data-url={(track.get("Audio") as Attachment[])[0].url}
                       >
-                        <Image src={playImage} alt="Play icon" />
+                        <Image
+                          src="/play.svg"
+                          width={20}
+                          height={20}
+                          alt="Play/Stop icon"
+                        />
                       </button>
                     )}
                   </p>
@@ -162,11 +170,31 @@ const timestampify = (s: number) => {
 
 <script>
   document.querySelectorAll(".playButton").forEach((e) => {
-    e.addEventListener("click", (e) => {
-      const audioUrl = (e.target as HTMLButtonElement).dataset.url;
-      if (audioUrl) {
-        const audio = new Audio(audioUrl);
-        audio.play();
+    let audio: HTMLAudioElement | null = null;
+
+    e.addEventListener("click", (ev) => {
+      const img = e.querySelector("img");
+
+      if (img?.src.includes("/play.svg")) {
+        if (!audio) {
+          const audioUrl = (e as HTMLButtonElement).dataset.url;
+
+          if (audioUrl) {
+            audio = new Audio(audioUrl);
+          }
+        }
+
+        audio?.play();
+
+        if (img) {
+          img.src = "/stop.svg";
+        }
+      } else {
+        audio?.pause();
+
+        if (img) {
+          img.src = "/play.svg";
+        }
       }
     });
   });
