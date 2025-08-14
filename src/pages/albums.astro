@@ -172,7 +172,7 @@ const timestampify = (s: number) => {
   document.querySelectorAll(".playButton").forEach((e) => {
     let audio: HTMLAudioElement | null = null;
 
-    e.addEventListener("click", (ev) => {
+    e.parentElement?.addEventListener("click", (ev) => {
       const img = e.querySelector("img");
 
       if (img?.src.includes("/play.svg")) {
