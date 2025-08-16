@@ -23,7 +23,7 @@ const alumni = await membersTable.select({ view: "Alumni" }).all();
       class="grid grid-cols-4 gap-5 rounded-2xl bg-[#00000055] p-5 backdrop-blur-lg md:grid-cols-5"
     >
       {
-        alumni.map((alum) => (
+        alumni.toReversed().map((alum) => (
           <>
             <div class="flex flex-col items-center justify-center gap-1">
               <Image
