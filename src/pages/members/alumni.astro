@@ -34,6 +34,7 @@ const alumni = await membersTable.select({ view: "Alumni" }).all();
                 alt={`Picture of ${alum.get("Name")}`}
                 width={125}
                 height={125}
+                class="aspect-square object-cover"
               />
               <p class="text-md text-center font-bold md:text-lg">
                 {alum.get("Name")}
