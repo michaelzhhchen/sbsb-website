@@ -1,24 +1,42 @@
 ---
 import Image from "astro/components/Image.astro";
 import type { Records, FieldSet, Attachment } from "airtable";
-import airtable from "../utils/airtable";
+import { base, downloadedFile as downloadFile } from "../utils/airtable";
 
 import Layout from "../layouts/Layout.astro";
 import SocialLink from "../components/socialLink.astro";
 import albumsImage from "../assets/albums.jpg";
 
-const albumsTable = airtable.table("Albums");
-const songsTable = airtable.table("Songs");
+const albumsTable = base.table("Albums");
+const songsTable = base.table("Songs");
 
 const albums = await albumsTable
   .select({ sort: [{ field: "Release Year", direction: "desc" }] })
   .all();
 
-const songsByAlbum: { [id: string]: Records<FieldSet> } = {};
+const albumCovers: { [id: string]: string } = {};
 for (const album of albums) {
-  songsByAlbum[album.id] = await Promise.all(
+  albumCovers[album.id] = await downloadFile(
+    ((album.get("Cover") as Attachment[]) ?? [])[0]?.url,
+  );
+}
+
+const tracksByAlbum: { [id: string]: Records<FieldSet> } = {};
+for (const album of albums) {
+  tracksByAlbum[album.id] = await Promise.all(
     (album.get("Songs") as string[]).map((s) => songsTable.find(s)),
   );
+}
+
+const trackMedia: { [id: string]: string } = {};
+for (const albumId in tracksByAlbum) {
+  const album = tracksByAlbum[albumId];
+
+  for (const track of album) {
+    trackMedia[track.id] = await downloadFile(
+      ((track.get("Audio") as Attachment[]) ?? [])[0]?.url,
+    );
+  }
 }
 
 const timestampify = (s: number) => {
@@ -37,7 +55,7 @@ const timestampify = (s: number) => {
           <div class="grid w-full grid-cols-2 items-center justify-items-center">
             {album.get("Cover") && (
               <Image
-                src={((album.get("Cover") as Attachment[]) ?? [])[0]?.url}
+                src={albumCovers[album.id]}
                 alt={`Album cover for ${album.get("Name")}`}
                 width={200}
                 height={200}
@@ -86,7 +104,7 @@ const timestampify = (s: number) => {
 
           <hr class="h-[1px] w-full bg-white" />
 
-          {songsByAlbum[album.id].map((track) => (
+          {tracksByAlbum[album.id].map((track) => (
             <div class="sbsbTrack w-full">
               <div class="group text-md flex min-h-9 w-full items-center justify-between md:text-lg">
                 <div class="flex items-center gap-3">
@@ -103,7 +121,7 @@ const timestampify = (s: number) => {
                     {track.get("Audio") && (
                       <button
                         class="playButton hidden h-3 w-3 group-focus-within:block group-hover:block group-focus:block focus:block"
-                        data-url={(track.get("Audio") as Attachment[])[0].url}
+                        data-url={trackMedia[track.id]}
                       >
                         <Image
                           src="/play.svg"

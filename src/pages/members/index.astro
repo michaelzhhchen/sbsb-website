@@ -1,20 +1,22 @@
 ---
-import Airtable, { type Attachment } from "airtable";
-import { getSecret } from "astro:env/server";
+import { type Attachment } from "airtable";
+import { base, downloadedFile } from "../../utils/airtable";
 
 import Layout from "../../layouts/Layout.astro";
 import Image from "astro/components/Image.astro";
 
 import membersImage from "../../assets/members.jpg";
 
-Airtable.configure({
-  apiKey: getSecret("AIRTABLE_API_KEY"),
-});
-
-const base = Airtable.base(getSecret("AIRTABLE_BASE_ID")!);
 const membersTable = base.table("Members");
 
 const members = await membersTable.select({ view: "Current" }).all();
+
+const fileUrls: { [id: string]: string } = {};
+for (const member of members) {
+  fileUrls[member.id] = await downloadedFile(
+    ((member.get("Picture") as Attachment[]) ?? [])[0]?.url,
+  );
+}
 ---
 
 <Layout title="Members" img={membersImage} alt="SBSB performing on stage">
@@ -28,10 +30,7 @@ const members = await membersTable.select({ view: "Current" }).all();
             <div class="flex w-full flex-col gap-3">
               <div class="flex flex-row items-start justify-start gap-5">
                 <Image
-                  src={
-                    ((member.get("Picture") as Attachment[]) ?? [])[0]?.url ??
-                    "/favicon.ico"
-                  }
+                  src={fileUrls[member.id]}
                   alt={`Picture of ${member.get("Name")}`}
                   width={150}
                   height={150}
