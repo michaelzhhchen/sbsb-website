@@ -3,10 +3,6 @@ import { getSecret } from "astro:env/server";
 import fs from "fs/promises";
 import { existsSync } from "fs";
 
-Airtable.configure({
-  apiKey: getSecret("AIRTABLE_API_KEY"),
-});
-
 export const base = Airtable.base(getSecret("AIRTABLE_BASE_ID")!);
 
 const FILES_DIR =
